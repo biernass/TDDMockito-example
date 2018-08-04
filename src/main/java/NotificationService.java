@@ -2,8 +2,8 @@ import javax.management.ServiceNotFoundException;
 
 public class NotificationService {
 
-        private PidgeonService pigeonService;
-        private EmailService emailService;
+    private PidgeonService pigeonService;
+    private EmailService emailService;
 
     public NotificationService(PidgeonService pigeonService, EmailService emailService) {
         this.pigeonService = pigeonService;
@@ -11,13 +11,13 @@ public class NotificationService {
     }
 
     public void sendNotification() {
-            if (emailService.isAvailable()) {
-                emailService.sendEmail("Wysłano wiadomość email");
-            } else if (pigeonService.isAvailable()) {
-                pigeonService.sendMessage("Wysłano wiadomość gołębiem");
-            } else {
-                throw new RuntimeException("Serwis niedostępny");
-            }
+        if (emailService.isAvailable()) {
+            emailService.sendEmail("send email");
+        } else if (pigeonService.isAvailable()) {
+            pigeonService.sendMessage("send pigeon");
+        } else {
+            throw new IllegalStateException("services unavailable");
         }
     }
+}
 

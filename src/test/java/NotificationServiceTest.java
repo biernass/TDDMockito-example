@@ -4,7 +4,9 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
 import static org.mockito.Mockito.*;
+
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -27,28 +29,25 @@ public class NotificationServiceTest {
     public void shouldSendEmailWhenEmailServiceIsAvailable() {
         when(emailService.isAvailable()).thenReturn(true);
         notificationService.sendNotification();
-        verify(emailService).sendEmail("Wysłano wiadomość email");
+        verify(emailService).sendEmail("send email");
     }
 
     @Test
-    public void shouldSendMessageWhenPidgeonServiceIsAvailable(){
+    public void shouldSendMessageWhenPidgeonServiceIsAvailable() {
         when(pidgeonService.isAvailable()).thenReturn(true);
         notificationService.sendNotification();
-        verify(pidgeonService).sendMessage("Wysłano wiadomość gołębiem");
+        verify(pidgeonService).sendMessage("send pigeon");
     }
 
     @Test
-    public void shouldReturnRuntimeExceprionWhenNoneOfServiceIsAvailable(){
+    public void shouldReturnIllegalStateExceptionWhenNoneOfServiceIsAvailable() {
         when(pidgeonService.isAvailable()).thenReturn(false);
         when(emailService.isAvailable()).thenReturn(false);
-        expectedException.expect(RuntimeException.class);
-        expectedException.expectMessage("Serwis niedostępny");
+        expectedException.expect(IllegalStateException.class);
+        expectedException.expectMessage("services unavailable");
         notificationService.sendNotification();
 
     }
-
-
-
 
 
 }

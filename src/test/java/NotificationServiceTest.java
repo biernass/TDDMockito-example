@@ -1,4 +1,6 @@
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -17,6 +19,10 @@ public class NotificationServiceTest {
     @InjectMocks
     private NotificationService notificationService;
 
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
+
     @Test
     public void shouldSendEmailWhenEmailServiceIsAvailable() {
         when(emailService.isAvailable()).thenReturn(true);
@@ -31,7 +37,15 @@ public class NotificationServiceTest {
         verify(pidgeonService).sendMessage("Wysłano wiadomość gołębiem");
     }
 
+    @Test
+    public void shouldReturnRuntimeExceprionWhenNoneOfServiceIsAvailable(){
+        when(pidgeonService.isAvailable()).thenReturn(false);
+        when(emailService.isAvailable()).thenReturn(false);
+        expectedException.expect(RuntimeException.class);
+        expectedException.expectMessage("Serwis niedostępny");
+        notificationService.sendNotification();
 
+    }
 
 
 
